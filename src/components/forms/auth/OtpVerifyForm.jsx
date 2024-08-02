@@ -1,6 +1,7 @@
 import React from "react";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
@@ -11,8 +12,9 @@ const schema = yup.object().shape({
     otp: yup.string().matches(/^\d{6}$/, 'OTP must be a 6-digit number').required('OTP is required'),
 });
 
-function OtpVerifyForm({ setFormStep, userEmail }) {
+function OtpVerifyForm({ type, setFormStep, userEmail }) {
 
+    const navigate = useNavigate();
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
     });
@@ -30,7 +32,12 @@ function OtpVerifyForm({ setFormStep, userEmail }) {
                     if (data?.success === true) {
                         reset();
                         toast.success(data?.message);
-                        setFormStep(2);
+                        if(type == 'register') {
+                            navigate('/auth/login');
+                        }
+                        if(type == 'setPassword') {
+                            setFormStep(2);
+                        }
                     } else {
                         toast.error(data?.message);
                     }

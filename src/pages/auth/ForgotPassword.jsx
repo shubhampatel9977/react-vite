@@ -39,7 +39,7 @@ function ForgotPassword() {
                     </div>
 
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                        <OtpVerifyForm setFormStep={setFormStep} userEmail={userEmail} />
+                        <OtpVerifyForm type={'setPassword'} setFormStep={setFormStep} userEmail={userEmail} />
                     </div>
                 </div>
             )};

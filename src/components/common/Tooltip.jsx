@@ -14,7 +14,7 @@ function Tooltip({ text, children }) {
       >
         {children}
         {visible && (
-          <div className="absolute bottom-full  mb-2 w-max p-2 text-sm text-white bg-primary-500 rounded shadow-lg transform -translate-x-1/2 -left-8">
+          <div className="absolute bottom-full  mb-2 w-max p-2 text-sm text-white bg-primary-400 rounded shadow-lg transform -translate-x-1/2 -left-8">
             {text}
           </div>
         )}

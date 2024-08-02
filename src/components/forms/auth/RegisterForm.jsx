@@ -14,7 +14,7 @@ const schema = yup.object().shape({
     password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
 });
 
-function RegisterForm() {
+function RegisterForm({ setFormStep, setUserEmail }) {
 
     const navigate = useNavigate();
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
@@ -34,7 +34,9 @@ function RegisterForm() {
                 onSuccess: (data) => {
                     if (data?.success === true) {
                         reset();
-                        navigate('/auth/login');
+                        setFormStep(1);
+                        setUserEmail(payloadData?.email);
+                        // navigate('/auth/login');
                         toast.success(data?.message);
                     } else {
                         toast.error(data?.message);

@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminSidebar from './sidebar/AdminSidebar';
 
 const AdminLayout = ({ children }) => {
+    
+    const adminAccessToken = localStorage.getItem('adminAccessToken');
+    const adminRefreshToken = localStorage.getItem('adminRefreshToken');
+
+    // console.log('MainLayout-adminAccessToken ->', adminAccessToken);
+    // console.log('MainLayout-adminRefreshToken ->', adminRefreshToken);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!adminAccessToken || !adminRefreshToken) {
+            navigate("/auth/adminLogin");
+        }
+    },[adminAccessToken,adminRefreshToken]);
+
     return (
         <>
-            <aside id="sidebar-multi-level-sidebar" className="fixed top-0 left-0 z-40 bg-primary-400 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+            <section className='flex'>
                 <AdminSidebar />
-            </aside>
-
-            <div className="p-4 sm:ml-64">
                 {children}
-            </div>
+            </section>
         </>
     )
 };
