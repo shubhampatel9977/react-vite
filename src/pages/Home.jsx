@@ -7,9 +7,10 @@ import useDebounce from '../utils/useDebounce';
 import StudentTable from "../components/tables/StudentTable";
 import Pagination from "../components/common/Pagination";
 import StudentModal from "../components/modals/StudentModal";
-import ConfirmModel from "../components/modals/ConfirmModal";
+import ConfirmModal from "../components/modals/ConfirmModal";
 import useGetAllStudents from "../hooks/students/useGetAllStudents";
 import useDeleteStudent from "../hooks/students/useDeleteStudent";
+
 
 function Home() {
 
@@ -21,10 +22,9 @@ function Home() {
     const [totalEntries, setTotalEntries] = useState(0);
     const [searchInput, setSearchInput] = useState('');
 
-    const [showAddModel, setShowAddModel] = useState(false);
-    const [showUpdateModel, setShowUpdateModel] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [isUpdateData, setIsUpdateData] = useState(null);
-    const [showDeleteModel, setShowDeleteModel] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isdeleteId, setIsDeleteId] = useState(null);
 
     const deSearchInput = useDebounce(searchInput);
@@ -45,28 +45,23 @@ function Home() {
         setActivePage(pageNumber);
     };
 
-    // add student model
-    function closeAddModal() {
-        setShowAddModel(false);
-    }
-
-    // update student
-    function closeUpdateModal() {
-        setShowUpdateModel(false)
+    // add / update student modal
+    function closeModal() {
+        setShowModal(false)
         setIsUpdateData(null);
     };
     function editHandler(data) {
-        setShowUpdateModel(true);
+        setShowModal(true);
         setIsUpdateData(data);
     }
 
-    // delete student
+    // delete student modal
     function closeDeleteModal() {
-        setShowDeleteModel(false);
+        setShowDeleteModal(false);
         setIsDeleteId(null);
     };
     function deleteHandler(id) {
-        setShowDeleteModel(true);
+        setShowDeleteModal(true);
         setIsDeleteId(id);
     };
     function confirmDelete() {
@@ -76,7 +71,7 @@ function Home() {
                     if (data.success === true) {
                         queryClient.invalidateQueries("get_all_students");
                         setIsDeleteId(null);
-                        setShowDeleteModel(false);
+                        setShowDeleteModal(false);
                         toast.success(data.message);
                     } else {
                         toast.error(data.message);
@@ -106,14 +101,10 @@ function Home() {
                                 placeholder='Search by student name'
                             />
                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
-                                <SearchIcon
-                                    width={20}
-                                    height={20}
-                                // fill={'white'}
-                                />
+                                <SearchIcon width={20} height={20} />
                             </div>
                         </div>
-                        <button onClick={() => setShowAddModel(true)} className="bg-primary-700 text-white py-2 px-4 rounded-lg flex items-center">
+                        <button onClick={() => setShowModal(true)} className="bg-primary-700 text-white py-2 px-4 rounded-lg flex items-center">
                             <PlusIcon className="mr-2" />
                             Add Student
                         </button>
@@ -135,16 +126,15 @@ function Home() {
                     paginationOptions={[5, 10, 20, 30, 50]}
                 />
                 <StudentModal
-                    isOpen={showAddModel}
-                    onClose={closeAddModal}
-                />
-                <StudentModal
-                    isOpen={showUpdateModel}
-                    onClose={closeUpdateModal}
+                    isOpen={showModal}
+                    onClose={closeModal}
                     initialData={isUpdateData}
                 />
-                <ConfirmModel
-                    isOpen={showDeleteModel}
+                <ConfirmModal
+                    heading="Delete"
+                    subHeading="Are you sure you want to delete student?"
+                    btnName="Delete Student"
+                    isOpen={showDeleteModal}
                     isLoading={isLoadingDelete}
                     onClose={closeDeleteModal}
                     onConfirm={confirmDelete}

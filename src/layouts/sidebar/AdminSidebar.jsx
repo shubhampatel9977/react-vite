@@ -12,7 +12,7 @@ function AdminSidebar() {
             <div className="flex justify-center py-2 mt-5">
                 <img src="https://flowbite.com/docs/images/logo.svg" className="size-20" alt="Flowbite Logo" />
             </div>
-            <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+            <div className="h-full px-3 py-4 overflow-y-auto">
                 <ul className="space-y-2 font-medium">
                     <li>
                         <Link to="/admin/" className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">

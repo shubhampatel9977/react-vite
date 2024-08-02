@@ -1,16 +1,16 @@
 import React from 'react';
-import ImageView from '../ui/ImageView';
-import { setImagePath } from "../../utils/setImagePath";
-import { formatISODate } from "../../utils/formatDate";
-import Tooltip from "../common/Tooltip";
-import LoaderIcon from '../../assets/SVGs/Loader';
-import UpdateIcon from '../../assets/SVGs/UpdateIcon';
-import DeleteIcon from '../../assets/SVGs/DeleteIcon';
-import dataNotFound from '../../assets/images/data_not_found.jpg';
-import defaultStudentIMG from '../../assets/images/default_student_img.png';
+import ImageView from '../../ui/ImageView';
+import { setImagePath } from "../../../utils/setImagePath";
+import { formatISODate } from "../../../utils/formatDate";
+import Tooltip from "../../common/Tooltip";
+import LoaderIcon from '../../../assets/SVGs/Loader';
+import UpdateIcon from '../../../assets/SVGs/UpdateIcon';
+import DeleteIcon from '../../../assets/SVGs/DeleteIcon';
+import dataNotFound from '../../../assets/images/data_not_found.jpg';
+import defaultStudentIMG from '../../../assets/images/default_student_img.png';
 
 
-const StudentTable = ({ loading, rows, updateEdit, updateDelete }) => {
+const TeacherTable = ({ loading, rows, updateEdit, updateDelete }) => {
 
   function handleEdit(data) {
     updateEdit(data);
@@ -81,12 +81,12 @@ const StudentTable = ({ loading, rows, updateEdit, updateDelete }) => {
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4">
                   <div className='flex gap-3'>
                     <div className='cursor-pointer' onClick={() => handleEdit(item)}>
-                      <Tooltip text={"Edit Student"}>
+                      <Tooltip text={"Edit Teacher"}>
                         <UpdateIcon fill={"#1D4ED8"}/>
                       </Tooltip>
                     </div>
                     <div className='cursor-pointer'>
-                      <Tooltip text={"Delete Student"}>
+                      <Tooltip text={"Delete Teacher"}>
                         <DeleteIcon fill={"#1D4ED8"} onClick={() => handleDelete(item?._id)} />
                       </Tooltip>
                     </div>
@@ -113,4 +113,4 @@ const StudentTable = ({ loading, rows, updateEdit, updateDelete }) => {
   )
 };
 
-export default StudentTable;
+export default TeacherTable;

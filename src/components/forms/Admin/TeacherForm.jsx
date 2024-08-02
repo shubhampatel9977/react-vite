@@ -4,13 +4,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ImageView from '../ui/ImageView';
-import TextEditor from '../common/TextEditor';
-import FormSubmitBtn from '../ui/buttons/FormSubmitBtn';
-import FormCancelBtn from '../ui/buttons/FormCancelBtn';
-import { setImagePath } from '../../utils/setImagePath';
-import useCreateStudent from "../../hooks/students/useCreateStudent";
-import useUpdateStudent from "../../hooks/students/useUpdateStudent";
+import ImageView from '../../ui/ImageView';
+import TextEditor from '../../common/TextEditor';
+import FormSubmitBtn from '../../ui/buttons/FormSubmitBtn';
+import FormCancelBtn from '../../ui/buttons/FormCancelBtn';
+import { setImagePath } from '../../../utils/setImagePath';
+import useCreateTeacher from "../../../hooks/Admin/teachers/useCreateTeacher";
+import useUpdateTeacher from "../../../hooks/Admin/teachers/useUpdateTeacher";
 
 
 // Define the validation schema with Yup
@@ -22,11 +22,11 @@ const schema = yup.object().shape({
     description: yup.string().required('Description is required'),
 });
 
-function StudentForm({ onClose, isUpdate, initialData }) {
+function TeacherForm({ onClose, isUpdate, initialData }) {
 
     const queryClient = useQueryClient();
-    const { mutate: createStudent, isLoading: createStudLoading } = useCreateStudent();
-    const { mutate: updateStudent, isLoading: updateStudLoading } = useUpdateStudent();
+    const { mutate: createTeacher, isLoading: createTechLoading } = useCreateTeacher();
+    const { mutate: updateTeacher, isLoading: updateTechLoading } = useUpdateTeacher();
     const [image, setImage] = useState(null);
     
     const { handleSubmit, control, reset, formState: { errors } } = useForm({resolver: yupResolver(schema)});
@@ -49,10 +49,10 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                 if (image) {
                     payload.profile = formData?.profile[0]
                 }
-                updateStudent(payload, {
+                updateTeacher(payload, {
                     onSuccess: (data) => {
                         if (data.success === true) {
-                            queryClient.invalidateQueries("get_all_students");
+                            queryClient.invalidateQueries("get_all_teachers");
                             reset();
                             onClose();
                             toast.success(data.message);
@@ -62,19 +62,19 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                     },
                     onError: (err) => {
                         toast.error(err.message);
-                        console.log('onError update Student', err);
+                        console.log('onError update Teacher', err);
                     },
                 })
             } catch (err) {
-                console.error('Error update Student:', err);
+                console.error('Error update Teacher:', err);
             }
         } else {
             try {
                 payload.profile = formData?.profile[0]
-                createStudent(payload, {
+                createTeacher(payload, {
                     onSuccess: (data) => {
                         if (data.success === true) {
-                            queryClient.invalidateQueries("get_all_students");
+                            queryClient.invalidateQueries("get_all_teachers");
                             reset();
                             onClose();
                             toast.success(data.message);
@@ -84,11 +84,11 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                     },
                     onError: (err) => {
                         toast.error(err.message);
-                        console.log('onError-create student', err);
+                        console.log('onError-create Teacher', err);
                     },
                 })
             } catch (err) {
-                console.error('Error create student:', err);
+                console.error('Error Create Teacher:', err);
             }
         }
     };
@@ -108,7 +108,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex gap-8'>
                     <div className='w-[50%]'>
-                        <label htmlFor="profile" className="block text-left mb-2 text-sm font-medium text-gray-900">Student Profile*</label>
+                        <label htmlFor="profile" className="block text-left mb-2 text-sm font-medium text-gray-900">Teacher Profile*</label>
                         <Controller
                             name="profile"
                             control={control}
@@ -128,7 +128,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                         {errors.profile && <p className="text-left text-red-600 text-sm mt-1">{errors.profile.message}</p>}
                     </div>
                     <div className='w-[50%]'>
-                        <label htmlFor="name" className="block text-left mb-2 text-sm font-medium text-gray-900">Student Name*</label>
+                        <label htmlFor="name" className="block text-left mb-2 text-sm font-medium text-gray-900">Teacher Name*</label>
                         <Controller
                             name="name"
                             control={control}
@@ -150,7 +150,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
 
                 <div className='flex gap-8'>
                     <div className='w-[50%]'>
-                        <label htmlFor="age" className="block text-left mb-2 text-sm font-medium text-gray-900">Student Age*</label>
+                        <label htmlFor="age" className="block text-left mb-2 text-sm font-medium text-gray-900">Teacher Age*</label>
                         <Controller
                             name="age"
                             control={control}
@@ -160,7 +160,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                                     id="age"
                                     type="number"
                                     name="age"
-                                    placeholder="Enter Student Age"
+                                    placeholder="Enter Teacher Age"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-dark-600 focus:border-primary-dark-600 block w-full p-2.5"
                                     {...field}
                                 />
@@ -169,7 +169,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                         {errors.age && <p className="text-left text-red-600 text-sm mt-1">{errors.age.message}</p>}
                     </div>
                     <div className='w-[50%]'>
-                        <label htmlFor="college" className="block text-left mb-2 text-sm font-medium text-gray-900">Student University*</label>
+                        <label htmlFor="college" className="block text-left mb-2 text-sm font-medium text-gray-900">Teacher University*</label>
                         <Controller
                             name="college"
                             control={control}
@@ -207,7 +207,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                 </div>
 
                 <div className='flex gap-5'>
-                    <FormSubmitBtn type="submit" isLoading={createStudLoading || updateStudLoading} name={isUpdate ? "Update Student" : "Add Student"} />
+                    <FormSubmitBtn type="submit" isLoading={createTechLoading || updateTechLoading} name={isUpdate ? "Update Teacher" : "Add Teacher"} />
                     <FormCancelBtn onClick={onClose} name={"Cancel"} />
                 </div>
             </form>
@@ -215,4 +215,4 @@ function StudentForm({ onClose, isUpdate, initialData }) {
     )
 };
 
-export default StudentForm;
+export default TeacherForm;
