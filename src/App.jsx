@@ -1,17 +1,18 @@
 import { Routes, Route } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-import AdminLayout from './layouts/AdminLayout';
-import MainRoutes from './routes/mainRoutes';
-import AuthRoutes from './routes/authRoutes';
-import AdminRoutes from './routes/adminRoutes';
+import MainRoutes from './routes/MainRoutes';
+import AuthRoutes from './routes/AuthRoutes';
+import AdminRoutes from './routes/AdminRoutes';
+import AuthProtRoute from './routes/protectedRoutes/AuthProtRoute';
+import UserProtRoute from './routes/protectedRoutes/UserProtRoute';
+import AdminProtRoute from './routes/protectedRoutes/AdminProtRoute';
 
 function App() {
 
   return (
     <Routes>
-      <Route path="/*" element={<MainLayout><MainRoutes /></MainLayout>} />
-      <Route path="/auth/*" element={<AuthRoutes />} />
-      <Route path="/admin/*" element={<AdminLayout><AdminRoutes /></AdminLayout>} />
+      <Route path="/*" element={<UserProtRoute><MainRoutes /></UserProtRoute>} />
+      <Route path="/auth/*" element={<AuthProtRoute><AuthRoutes /></AuthProtRoute>} />
+      <Route path="/admin/*" element={<AdminProtRoute><AdminRoutes /></AdminProtRoute>} />
     </Routes>
   )
 }

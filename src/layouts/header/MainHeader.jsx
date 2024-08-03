@@ -1,21 +1,19 @@
-import Recat, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ImageView from '../../components/ui/ImageView';
+import { clearUserInfo } from '../../store/slice/userSlice';
 import DownArrowIcon from "../../assets/SVGs/DownArrowIcon";
 import defaultStudentIMG from '../../assets/images/default_student_img.png';
 
 
 function MainHeader() {
 
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
-    const isLoginUser = !!accessToken && !!refreshToken;
-
-    console.log(isLoginUser)
+    const isLoginUser = useSelector((state) => state?.loginUserData?.isLoggedIn);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -24,6 +22,7 @@ function MainHeader() {
     function logOutHandler() {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        dispatch(clearUserInfo());
         navigate('/auth/login');
     }
 

@@ -3,7 +3,7 @@ import Home from '../pages/Home';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
 
-const mainRoutes = () => (
+const MainRoutes = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="about" element={<About />} />
@@ -12,4 +12,4 @@ const mainRoutes = () => (
   </Routes>
 );
 
-export default mainRoutes;
+export default MainRoutes;

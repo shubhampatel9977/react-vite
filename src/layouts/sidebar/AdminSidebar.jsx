@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import ConfirmModal from '../../components/modals/ConfirmModal';
+import { clearAdminUserInfo } from '../../store/slice/adminUserSlice';
 
 function AdminSidebar() {
 
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const [modalShow, setModalShow] = useState(false);
-
-    console.log('modalShow', modalShow);
 
     function signOutHandler() {
         setModalShow(true);
@@ -21,6 +21,7 @@ function AdminSidebar() {
     function confirmSignOut() {
         localStorage.removeItem("adminAccessToken");
         localStorage.removeItem("adminRefreshToken");
+        dispatch(clearAdminUserInfo());
         navigate("/auth/adminlogin");
     }
 

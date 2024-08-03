@@ -4,9 +4,11 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
 import useLogin from "../../../hooks/auth/useLogin";
+import { setUserInfo } from '../../../store/slice/userSlice';
 
 // Define the validation schema with Yup
 const schema = yup.object().shape({
@@ -17,11 +19,12 @@ const schema = yup.object().shape({
 function LogInForm() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { mutate: userLogin, isLoading } = useLogin();
+  
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
     });
-
-    const { mutate: userLogin, isLoading } = useLogin();
 
     const onSubmit = (data) => {
         const payloadData = {
@@ -35,6 +38,7 @@ function LogInForm() {
                         reset();
                         localStorage.setItem('accessToken', data?.data?.accessToken);
                         localStorage.setItem('refreshToken', data?.data?.refreshToken);
+                        dispatch(setUserInfo(data?.data?.userInfo));
                         navigate('/');
                         toast.success(data?.message);
                     } else {
