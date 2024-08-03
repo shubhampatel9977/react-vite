@@ -38,7 +38,7 @@ function AdminLoginForm() {
                         localStorage.setItem('adminAccessToken', data?.data?.accessToken);
                         localStorage.setItem('adminRefreshToken', data?.data?.refreshToken);
                         dispatch(setAdminUserInfo(data?.data?.userInfo));
-                        navigate('/admin/');
+                        navigate('/admin');
                         toast.success(data?.message);
                     } else {
                         toast.error(data?.message);

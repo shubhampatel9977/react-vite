@@ -64,7 +64,6 @@ function MainHeader() {
                                                     className="block px-4 py-3 text-sm text-white hover:bg-primary-700"
                                                 >
                                                     <span className="font-bold flex items-start mb-[-3px]">
-                                                        {/* <SignOutIcon fill="#0B3447" />  */}
                                                         <span className=""> Logout</span>
                                                     </span>
                                                 </Link>
