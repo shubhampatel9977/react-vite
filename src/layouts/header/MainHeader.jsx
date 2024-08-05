@@ -53,7 +53,7 @@ function MainHeader() {
                                             Hi, Guest
                                         </span>
                                         <div className="ml-2">
-                                            <DownArrowIcon />
+                                            <DownArrowIcon height={18} width={18} />
                                         </div>
                                     </button>
                                     {/* Dropdown menu */}

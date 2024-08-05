@@ -1,6 +1,7 @@
 import axios from 'axios';
-// import { useDispatch } from 'react-redux'
-// import { clearUserInfo } from '../store/slice/userSlice';
+import { clearUserInfo } from '../store/slice/userSlice';
+import { clearAdminUserInfo } from '../store/slice/adminUserSlice.js'
+import { store } from '../store/store.js'
 
 const bashPath = import.meta.env.VITE_BASH_PATH
 
@@ -18,11 +19,12 @@ export const fetchAccessToken = async (refreshToken, type) => {
         if(type == "user") {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
-          // dispatch( clearUserInfo());
+          store.dispatch(clearUserInfo());
         }
         if(type == "Admin") {
           localStorage.removeItem("adminAccessToken");
           localStorage.removeItem("adminRefreshToken");
+          store.dispatch(clearAdminUserInfo());
         }
       }
     }

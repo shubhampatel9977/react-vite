@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import MainHeader from './header/MainHeader';
 
 const MainLayout = ({ children }) => {
-    const navigate = useNavigate();
     return (
         <>
             <section>
                 <MainHeader/>
-                {children}
+                <div className='w-full'>
+                    {children}
+                </div>
             </section>
         </>
     )

@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import AdminSidebar from './sidebar/AdminSidebar';
 
 const AdminLayout = ({ children }) => {
-    const navigate = useNavigate();
-    
     return (
         <>
             <section className='flex'>
                 <AdminSidebar />
-                {children}
+                <div className='w-full'>
+                    {children}
+                </div>
             </section>
         </>
     )
