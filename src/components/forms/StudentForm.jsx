@@ -14,8 +14,8 @@ import useUpdateStudent from "../../hooks/students/useUpdateStudent";
 
 
 // Define the validation schema with Yup
-const schema = yup.object().shape({
-    profile: yup.mixed().required('Image is required'),
+const schema = (isUpdate) => yup.object().shape({
+    profile: isUpdate ? yup.mixed() : yup.mixed().required('Image is required'),
     name: yup.string().required('Name is required'),
     age: yup.number().positive('Age must be a positive number').required('Age is required'),
     college: yup.string().required('University is required'),
@@ -29,7 +29,7 @@ function StudentForm({ onClose, isUpdate, initialData }) {
     const { mutate: updateStudent, isLoading: updateStudLoading } = useUpdateStudent();
     const [image, setImage] = useState(null);
     
-    const { handleSubmit, control, reset, formState: { errors } } = useForm({resolver: yupResolver(schema)});
+    const { handleSubmit, control, reset, formState: { errors } } = useForm({resolver: yupResolver(schema(isUpdate))});
     
     const handleFileChange = (files) => {
         setImage(URL.createObjectURL(files[0]));
