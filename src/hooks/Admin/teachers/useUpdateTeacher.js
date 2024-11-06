@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { axioAdminWithAuth } from "../../../libs/axioAdminWithAuth";
+import { axiosWithAuth } from "../../../libs/axiosWithAuth";
 
 const updateTeacher = async (data) => {
   try {
@@ -11,7 +11,7 @@ const updateTeacher = async (data) => {
     formData.append("age", data?.age);
     formData.append("college", data?.college);
     formData.append("description", data?.description);
-    const response = await axioAdminWithAuth.put(`/admin/teacher/${data?.id}`, formData);
+    const response = await axiosWithAuth.put(`/admin/teacher/${data?.id}`, formData);
     return response.data;
   } catch (err) {
     console.error("Failed to update teacher:", err);

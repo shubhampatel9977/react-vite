@@ -5,6 +5,7 @@ import ImageView from '../../components/ui/ImageView';
 import { clearUserInfo } from '../../store/slice/userSlice';
 import DownArrowIcon from "../../assets/SVGs/DownArrowIcon";
 import defaultStudentIMG from '../../assets/images/default_student_img.png';
+import useLogOut from '../../hooks/auth/useLogOut';
 
 
 function MainHeader() {
@@ -12,18 +13,33 @@ function MainHeader() {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { mutate: userLogOut, isLoading } = useLogOut();
     const [isOpen, setIsOpen] = useState(false);
-    const isLoginUser = useSelector((state) => state?.loginUserData?.isLoggedIn);
+    const isLoginUser = useSelector((state) => state?.loginUserData?.userInfo);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
     function logOutHandler() {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch(clearUserInfo());
-        navigate('/auth/login');
+        try {
+            userLogOut({
+                onSuccess: (data) => {
+                    if (data?.success === true) {
+                        dispatch(clearUserInfo());
+                        navigate('/auth/login');
+                    } else {
+                        toast.error(data?.message);
+                    }
+                },
+                onError: (err) => {
+                    toast.error(err?.message);
+                    console.log("onError userLogOut:", err);
+                },
+            });
+        } catch (err) {
+            console.error("Error user logout:", err);
+        }
     }
 
     return (

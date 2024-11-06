@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
-import { axioAdminWithAuth } from "../../../libs/axioAdminWithAuth";
+import { axiosWithAuth } from "../../../libs/axiosWithAuth";
 
 const getTeacherById = async ({ queryKey }) => {
     try {
         const [_, techId] = queryKey;
-        const response = await axioAdminWithAuth.get(`/admin/teacher/${techId}`);
+        const response = await axiosWithAuth.get(`/admin/teacher/${techId}`);
         return response.data;
     } catch (err) {
         console.error("Failed to get teacher by id:", err);

@@ -1,9 +1,9 @@
 import { useMutation } from "react-query";
-import { axioAdminWithAuth } from "../../../libs/axioAdminWithAuth";
+import { axiosWithAuth } from "../../../libs/axiosWithAuth";
 
 const deleteTeacher = async (techId) => {
   try {
-    const response = await axioAdminWithAuth.delete(`/admin/teacher/${techId}`);
+    const response = await axiosWithAuth.delete(`/admin/teacher/${techId}`);
     return response.data;
   } catch (err) {
     console.error("Failed to delete teacher:", err);

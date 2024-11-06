@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
-import { axioAdminWithAuth } from "../../../libs/axioAdminWithAuth";
+import { axiosWithAuth } from "../../../libs/axiosWithAuth";
 
 const getAllTeachers = async ({ queryKey }) => {
     try {
         const [_, searchInput, page, limit] = queryKey;
-        const response = await axioAdminWithAuth.get(`/admin/teacher?name=${searchInput}&page=${page}&limit=${limit}`);
+        const response = await axiosWithAuth.get(`/admin/teacher?name=${searchInput}&page=${page}&limit=${limit}`);
         return response.data;
     } catch (err) {
         console.error("Failed to get all teachers:", err);

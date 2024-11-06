@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
 import useLogin from "../../../hooks/auth/useLogin";
-import { setAdminUserInfo } from '../../../store/slice/adminUserSlice';
 import OpenEyesIcon from "../../../assets/SVGs/OpenEyesIcon";
 import CloseEyesIcon from "../../../assets/SVGs/CloseEyesIcon";
 
@@ -43,9 +42,6 @@ function AdminLoginForm() {
                     if (data?.success === true) {
                         if(data?.data?.userInfo?.type === "admin") {
                             reset();
-                            localStorage.setItem('adminAccessToken', data?.data?.accessToken);
-                            localStorage.setItem('adminRefreshToken', data?.data?.refreshToken);
-                            dispatch(setAdminUserInfo(data?.data?.userInfo));
                             navigate('/admin');
                             toast.success(data?.message);
                         } else {

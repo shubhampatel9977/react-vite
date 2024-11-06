@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import ConfirmModal from '../../components/modals/ConfirmModal';
-import { clearAdminUserInfo } from '../../store/slice/adminUserSlice';
 import DashboardIcon from '../../assets/SVGs/DashboardIcon';
 import EcommerceIcon from "../../assets/SVGs/EcommerceIcon";
 import RightArowIcon from "../../assets/SVGs/RightArowIcon";
@@ -40,9 +39,6 @@ function AdminSidebar() {
     }
 
     function confirmSignOut() {
-        localStorage.removeItem("adminAccessToken");
-        localStorage.removeItem("adminRefreshToken");
-        dispatch(clearAdminUserInfo());
         navigate("/auth/adminlogin");
     }
 

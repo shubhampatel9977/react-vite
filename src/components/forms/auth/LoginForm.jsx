@@ -4,11 +4,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
 import useLogin from "../../../hooks/auth/useLogin";
-import { setUserInfo } from '../../../store/slice/userSlice';
 import OpenEyesIcon from "../../../assets/SVGs/OpenEyesIcon";
 import CloseEyesIcon from "../../../assets/SVGs/CloseEyesIcon";
 
@@ -21,7 +19,6 @@ const schema = yup.object().shape({
 function LogInForm() {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const { mutate: userLogin, isLoading } = useLogin();
 
@@ -44,9 +41,6 @@ function LogInForm() {
                     if (data?.success === true) {
                         if (data?.data?.userInfo?.type === "user") {
                             reset();
-                            localStorage.setItem('accessToken', data?.data?.accessToken);
-                            localStorage.setItem('refreshToken', data?.data?.refreshToken);
-                            dispatch(setUserInfo(data?.data?.userInfo));
                             navigate('/');
                             toast.success(data?.message);
                         } else {

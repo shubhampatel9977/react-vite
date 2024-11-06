@@ -4,14 +4,12 @@ import { useSelector } from 'react-redux';
 
 const AuthProtRoute = ({ children }) => {
 
-    const isLoginUser = useSelector((state) => state?.loginUserData?.isLoggedIn);
+    const userInfo = useSelector((state) => state?.loginUserData?.userInfo);
 
-    const isAdminLoggedIn = useSelector((state) => state?.loginAdminUserData?.isAdminLoggedIn);
-
-    if (isLoginUser)
+    if (userInfo?.type === "user")
         return <Navigate replace to="/" />
 
-    if (isAdminLoggedIn)
+    if (userInfo?.type === "admin")
         return <Navigate replace to="/admin" />
 
     return children;

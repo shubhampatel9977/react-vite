@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { axioAdminWithAuth } from "../../../libs/axioAdminWithAuth";
+import { axiosWithAuth } from "../../../libs/axiosWithAuth";
 
 const createTeacher = async (data) => {
   try {
@@ -9,7 +9,7 @@ const createTeacher = async (data) => {
     formData.append("age", data?.age);
     formData.append("college", data?.college);
     formData.append("description", data?.description);
-    const response = await axioAdminWithAuth.post(`/admin/teacher`, formData);
+    const response = await axiosWithAuth.post(`/admin/teacher`, formData);
     return response.data;
   } catch (err) {
     console.error("Failed to create teacher:", err);
