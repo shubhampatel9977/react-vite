@@ -1,7 +1,5 @@
 import React from "react";
-import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton"
@@ -11,7 +9,6 @@ import useRegister from "../../../hooks/auth/useRegister";
 
 function RegisterForm({ setFormStep, setUserEmail }) {
 
-    const navigate = useNavigate();
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(RegisterSchema),
         defaultValues: {
@@ -36,7 +33,6 @@ function RegisterForm({ setFormStep, setUserEmail }) {
                         reset();
                         setFormStep(1);
                         setUserEmail(payloadData?.email);
-                        navigate('/auth/login');
                         toast.success(data?.message);
                     } else {
                         toast.error(data?.message);

@@ -137,7 +137,7 @@ function TeacherForm({ onClose, isUpdate, initialData }) {
                                     id="name"
                                     type="text"
                                     name="name"
-                                    placeholder="Enter Pool Name"
+                                    placeholder="Enter Teacher Name"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-dark-600 focus:border-primary-dark-600 block w-full p-2.5"
                                     {...field}
                                 />
@@ -173,9 +173,10 @@ function TeacherForm({ onClose, isUpdate, initialData }) {
                             control={control}
                             render={({ field }) => (
                                 <select id='college' {...field} className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-dark-600 focus:border-primary-dark-600 block w-full p-2.5">
-                                    <option value="SAGE University">SAGE University</option>
-                                    <option value="DAVV University">DAVV University</option>
-                                    <option value="IPS University">IPS University</option>
+                                    <option value="">Select University</option>
+                                    <option value="SAGE_University">SAGE University</option>
+                                    <option value="DAVV_University">DAVV University</option>
+                                    <option value="IPS_University">IPS University</option>
                                 </select>
                             )}
                         />

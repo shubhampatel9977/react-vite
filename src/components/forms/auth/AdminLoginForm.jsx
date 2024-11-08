@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -9,6 +8,7 @@ import AuthButton from "../../ui/buttons/AuthButton";
 import OpenEyesIcon from "../../../assets/SVGs/OpenEyesIcon";
 import CloseEyesIcon from "../../../assets/SVGs/CloseEyesIcon";
 import { AdminLoginSchema } from "../../validations/AuthSchema";
+import { setUserInfo, setLoginInfo } from "../../../store/slice/userSlice";
 import useLogin from "../../../hooks/auth/useLogin";
 
 
