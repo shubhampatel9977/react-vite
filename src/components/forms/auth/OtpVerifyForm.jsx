@@ -5,18 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
+import { OtpSchema } from "../../validations/AuthSchema";
 import useOtpVerify from "../../../hooks/auth/useOtpVerify";
 
-// Define the validation schema with Yup
-const schema = yup.object().shape({
-    otp: yup.string().matches(/^\d{6}$/, 'OTP must be a 6-digit number').required('OTP is required'),
-});
 
 function OtpVerifyForm({ type, setFormStep, userEmail }) {
 
     const navigate = useNavigate();
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(OtpSchema),
+        defaultValues: {
+            otp: '',
+        }
     });
 
     const { mutate: otpVerify, isLoading } = useOtpVerify();

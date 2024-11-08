@@ -5,11 +5,9 @@ import AdminLayout from "../../layouts/AdminLayout";
 
 const AdminProtRoute = ({ children }) => {
 
-    const userInfo = useSelector((state) => state?.loginUserData?.userInfo);
+    const loginInfo = useSelector((state) => state?.loginUserData?.loginInfo);
 
-    // console.log('AdminProtRoute', userInfo?.type === "admin")
-
-    if (userInfo === null || userInfo?.type !== "admin") 
+    if (loginInfo === null || loginInfo?.userType !== "admin") 
         return <Navigate replace to="/auth/adminLogin" />
 
     return <AdminLayout>{children}</AdminLayout>;

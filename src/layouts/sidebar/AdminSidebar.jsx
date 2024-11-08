@@ -8,6 +8,8 @@ import RightArowIcon from "../../assets/SVGs/RightArowIcon";
 import DownArrowIcon from "../../assets/SVGs/DownArrowIcon";
 import SettingIcon from "../../assets/SVGs/SettingIcon";
 import SignOutIcon from "../../assets/SVGs/SignOutIcon";
+import { clearUserInfo } from '../../store/slice/userSlice';
+import useLogOut from '../../hooks/auth/useLogOut';
 
 
 function AdminSidebar() {
@@ -15,16 +17,17 @@ function AdminSidebar() {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { mutate: userLogOut } = useLogOut();
     const [modalShow, setModalShow] = useState(false);
     const [eCommerceOptions, setECommerceOptions] = useState(false);
 
-    const ecommerceOptions= ['/admin/ecommerce/products', '/admin/ecommerce/billing', '/admin/ecommerce/invoice'];
+    const ecommerceOptions = ['/admin/ecommerce/products', '/admin/ecommerce/billing', '/admin/ecommerce/invoice'];
 
     useEffect(() => {
-        if(ecommerceOptions.includes(location.pathname)) {
+        if (ecommerceOptions.includes(location.pathname)) {
             setECommerceOptions(true);
         }
-    },[])
+    }, [])
 
     function handleEcommerceClick() {
         setECommerceOptions((pre) => !pre);
@@ -39,7 +42,25 @@ function AdminSidebar() {
     }
 
     function confirmSignOut() {
-        navigate("/auth/adminlogin");
+
+        try {
+            userLogOut({
+                onSuccess: (data) => {
+                    if (data?.success === true) {
+                        dispatch(clearUserInfo());
+                        navigate("/auth/adminlogin");
+                    } else {
+                        toast.error(data?.message);
+                    }
+                },
+                onError: (err) => {
+                    toast.error(err?.message);
+                    console.log("onError admin LogOut:", err);
+                },
+            });
+        } catch (err) {
+            console.error("Error admin logout:", err);
+        }
     }
 
     return (
@@ -60,7 +81,7 @@ function AdminSidebar() {
                             <button onClick={handleEcommerceClick} type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100">
                                 <EcommerceIcon />
                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">E-commerce</span>
-                                {eCommerceOptions ? (<DownArrowIcon fill={'black'} height={18} width={18} />) : (<RightArowIcon height={18} width={18}/>)}
+                                {eCommerceOptions ? (<DownArrowIcon fill={'black'} height={18} width={18} />) : (<RightArowIcon height={18} width={18} />)}
                             </button>
                             <ul className={`ml-5 py-2 space-y-2 ${eCommerceOptions ? '' : 'hidden'}`}>
                                 <li>

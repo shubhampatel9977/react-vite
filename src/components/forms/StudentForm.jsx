@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as yup from "yup";
 import { useForm, Controller } from 'react-hook-form';
 import { useQueryClient } from "react-query";
 import { toast } from "react-toastify";
@@ -9,18 +8,10 @@ import TextEditor from '../common/TextEditor';
 import FormSubmitBtn from '../ui/buttons/FormSubmitBtn';
 import FormCancelBtn from '../ui/buttons/FormCancelBtn';
 import { setImagePath } from '../../utils/setImagePath';
+import StudentSchema from '../validations/StudentSchema';
 import useCreateStudent from "../../hooks/students/useCreateStudent";
 import useUpdateStudent from "../../hooks/students/useUpdateStudent";
 
-
-// Define the validation schema with Yup
-const schema = (isUpdate) => yup.object().shape({
-    profile: isUpdate ? yup.mixed() : yup.mixed().required('Image is required'),
-    name: yup.string().required('Name is required'),
-    age: yup.number().positive('Age must be a positive number').required('Age is required'),
-    college: yup.string().required('University is required'),
-    description: yup.string().required('Description is required'),
-});
 
 function StudentForm({ onClose, isUpdate, initialData }) {
 
@@ -29,7 +20,16 @@ function StudentForm({ onClose, isUpdate, initialData }) {
     const { mutate: updateStudent, isLoading: updateStudLoading } = useUpdateStudent();
     const [image, setImage] = useState(null);
     
-    const { handleSubmit, control, reset, formState: { errors } } = useForm({resolver: yupResolver(schema(isUpdate))});
+    const { handleSubmit, control, reset, formState: { errors } } = useForm({
+        resolver: yupResolver(StudentSchema(isUpdate)),
+        defaultValues: {
+            profile: initialData?.profile || null,
+            name: initialData?.name || "",
+            age: initialData?.age || "",
+            college: initialData?.college || "",
+            description: initialData?.description || "",
+        }
+    });
     
     const handleFileChange = (files) => {
         setImage(URL.createObjectURL(files[0]));
@@ -132,7 +132,6 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                         <Controller
                             name="name"
                             control={control}
-                            defaultValue={isUpdate ? initialData?.name : ""}
                             render={({ field }) => (
                                 <input
                                     id="name"
@@ -154,7 +153,6 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                         <Controller
                             name="age"
                             control={control}
-                            defaultValue={isUpdate ? initialData?.age : ""}
                             render={({ field }) => (
                                 <input
                                     id="age"
@@ -173,12 +171,11 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                         <Controller
                             name="college"
                             control={control}
-                            defaultValue={isUpdate ? initialData?.college : "running_pool"}
                             render={({ field }) => (
                                 <select id='college' {...field} className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-dark-600 focus:border-primary-dark-600 block w-full p-2.5">
-                                    <option value="SAGE University">SAGE University</option>
-                                    <option value="DAVV University">DAVV University</option>
-                                    <option value="IPS University">IPS University</option>
+                                    <option value="SAGE_University">SAGE University</option>
+                                    <option value="DAVV_University">DAVV University</option>
+                                    <option value="IPS_University">IPS University</option>
                                 </select>
                             )}
                         />
@@ -193,7 +190,6 @@ function StudentForm({ onClose, isUpdate, initialData }) {
                         <Controller
                             name="description"
                             control={control}
-                            defaultValue={isUpdate ? initialData?.description : ""}
                             render={({ field }) => (
                                 <TextEditor 
                                     value={field.value}

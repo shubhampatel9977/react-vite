@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageView from '../../components/ui/ImageView';
@@ -7,23 +7,22 @@ import DownArrowIcon from "../../assets/SVGs/DownArrowIcon";
 import defaultStudentIMG from '../../assets/images/default_student_img.png';
 import useLogOut from '../../hooks/auth/useLogOut';
 
-
 function MainHeader() {
-
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { mutate: userLogOut, isLoading } = useLogOut();
+    const { mutate: userLogOut } = useLogOut();
     const [isOpen, setIsOpen] = useState(false);
-    const isLoginUser = useSelector((state) => state?.loginUserData?.userInfo);
+    const loginInfo = useSelector((state) => state?.loginUserData?.loginInfo);
+    const dropdownRef = useRef(null);
 
     const toggleDropdown = () => {
-        setIsOpen(!isOpen);
+        setIsOpen((prev) => !prev);
     };
 
-    function logOutHandler() {
+    const logOutHandler = async () => {
         try {
-            userLogOut({
+            await userLogOut({
                 onSuccess: (data) => {
                     if (data?.success === true) {
                         dispatch(clearUserInfo());
@@ -40,7 +39,19 @@ function MainHeader() {
         } catch (err) {
             console.error("Error user logout:", err);
         }
-    }
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <header>
@@ -52,8 +63,8 @@ function MainHeader() {
                     </Link>
                     <div className="flex items-center lg:order-2">
                         <div>
-                            {isLoginUser ? (
-                                <div className="hidden md:block relative">
+                            {loginInfo?.userLogin ? (
+                                <div className="hidden md:block relative" ref={dropdownRef}>
                                     <button
                                         className="flex items-center text-sm rounded-full focus:outline-none"
                                         onClick={toggleDropdown}
@@ -72,13 +83,10 @@ function MainHeader() {
                                             <DownArrowIcon height={18} width={18} />
                                         </div>
                                     </button>
-                                    {/* Dropdown menu */}
                                     {isOpen && (
                                         <div className="absolute right-0 top-8 mt-2 w-48 bg-primary-500 shadow-lg rounded-lg overflow-hidden z-10">
                                             <div onClick={logOutHandler}>
-                                                <Link
-                                                    className="block px-4 py-3 text-sm text-white hover:bg-primary-700"
-                                                >
+                                                <Link className="block px-4 py-3 text-sm text-white hover:bg-primary-700">
                                                     <span className="font-bold flex items-start mb-[-3px]">
                                                         <span className=""> Logout</span>
                                                     </span>
@@ -116,7 +124,7 @@ function MainHeader() {
                 </div>
             </nav>
         </header>
-    )
-};
+    );
+}
 
 export default MainHeader;

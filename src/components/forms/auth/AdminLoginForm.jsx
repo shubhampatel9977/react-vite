@@ -6,15 +6,11 @@ import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
-import useLogin from "../../../hooks/auth/useLogin";
 import OpenEyesIcon from "../../../assets/SVGs/OpenEyesIcon";
 import CloseEyesIcon from "../../../assets/SVGs/CloseEyesIcon";
+import { AdminLoginSchema } from "../../validations/AuthSchema";
+import useLogin from "../../../hooks/auth/useLogin";
 
-// Define the validation schema with Yup
-const schema = yup.object().shape({
-    email: yup.string().email("Invalid email address").required("Email is required"),
-    password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-});
 
 function AdminLoginForm() {
 
@@ -24,7 +20,11 @@ function AdminLoginForm() {
     const { mutate: userLogin, isLoading } = useLogin();
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(AdminLoginSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
     });
 
     const togglePasswordVisibility = () => {
@@ -42,6 +42,8 @@ function AdminLoginForm() {
                     if (data?.success === true) {
                         if(data?.data?.userInfo?.type === "admin") {
                             reset();
+                            dispatch(setUserInfo(data.data.userInfo));
+                            dispatch(setLoginInfo({ userLogin: true, userType: data.data.userInfo.type }));
                             navigate('/admin');
                             toast.success(data?.message);
                         } else {
@@ -72,7 +74,6 @@ function AdminLoginForm() {
                         <Controller
                             name="email"
                             control={control}
-                            defaultValue=""
                             render={({ field }) => (
                                 <input
                                     {...field}
@@ -98,7 +99,6 @@ function AdminLoginForm() {
                             <Controller
                                 name="password"
                                 control={control}
-                                defaultValue=""
                                 render={({ field }) => (
                                     <input
                                         {...field}

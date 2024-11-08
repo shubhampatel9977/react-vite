@@ -4,21 +4,21 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import AuthButton from "../../ui/buttons/AuthButton";
+import AuthButton from "../../ui/buttons/AuthButton"
+import { RegisterSchema } from "../../validations/AuthSchema";
 import useRegister from "../../../hooks/auth/useRegister";
 
-// Define the validation schema with Yup
-const schema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    email: yup.string().email("Invalid email address").required("Email is required"),
-    password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-});
 
 function RegisterForm({ setFormStep, setUserEmail }) {
 
     const navigate = useNavigate();
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(RegisterSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+        }
     });
 
     const { mutate: userRegister, isLoading } = useRegister();
@@ -36,7 +36,7 @@ function RegisterForm({ setFormStep, setUserEmail }) {
                         reset();
                         setFormStep(1);
                         setUserEmail(payloadData?.email);
-                        // navigate('/auth/login');
+                        navigate('/auth/login');
                         toast.success(data?.message);
                     } else {
                         toast.error(data?.message);

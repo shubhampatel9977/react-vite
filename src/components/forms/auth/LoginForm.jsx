@@ -4,26 +4,29 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
 import { yupResolver } from "@hookform/resolvers/yup";
-import AuthButton from "../../ui/buttons/AuthButton";
-import useLogin from "../../../hooks/auth/useLogin";
 import OpenEyesIcon from "../../../assets/SVGs/OpenEyesIcon";
 import CloseEyesIcon from "../../../assets/SVGs/CloseEyesIcon";
+import AuthButton from "../../ui/buttons/AuthButton";
+import { LoginSchema } from "../../validations/AuthSchema";
+import { setUserInfo, setLoginInfo } from "../../../store/slice/userSlice";
+import useLogin from "../../../hooks/auth/useLogin";
 
-// Define the validation schema with Yup
-const schema = yup.object().shape({
-    email: yup.string().email("Invalid email address").required("Email is required"),
-    password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-});
 
 function LogInForm() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const { mutate: userLogin, isLoading } = useLogin();
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(LoginSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
     });
 
     const togglePasswordVisibility = () => {
@@ -41,6 +44,8 @@ function LogInForm() {
                     if (data?.success === true) {
                         if (data?.data?.userInfo?.type === "user") {
                             reset();
+                            dispatch(setUserInfo(data.data.userInfo));
+                            dispatch(setLoginInfo({ userLogin: true, userType: data.data.userInfo.type }));
                             navigate('/');
                             toast.success(data?.message);
                         } else {
@@ -71,7 +76,6 @@ function LogInForm() {
                         <Controller
                             name="email"
                             control={control}
-                            defaultValue=""
                             render={({ field }) => (
                                 <input
                                     {...field}
@@ -100,7 +104,6 @@ function LogInForm() {
                             <Controller
                                 name="password"
                                 control={control}
-                                defaultValue=""
                                 render={({ field }) => (
                                     <input
                                         {...field}

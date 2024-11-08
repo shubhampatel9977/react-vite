@@ -5,9 +5,9 @@ import MainLayout from "../../layouts/MainLayout";
 
 const UserProtRoute = ({ children }) => {
 
-    const userInfo = useSelector((state) => state?.loginUserData?.userInfo);
+    const loginInfo = useSelector((state) => state?.loginUserData?.loginInfo);
 
-    if (userInfo === null || userInfo?.type !== "user") {
+    if (loginInfo === null || loginInfo?.userType !== "user") {
         return <Navigate replace to="/auth/login" />
     }
 

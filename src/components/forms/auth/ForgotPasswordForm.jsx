@@ -4,17 +4,17 @@ import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
+import { ForgotPasswordSchema } from "../../validations/AuthSchema";
 import useForgotPassword from "../../../hooks/auth/useForgotPassword";
 
-// Define the validation schema with Yup
-const schema = yup.object().shape({
-    email: yup.string().email("Invalid email address").required("Email is required"),
-});
 
 function ForgotPasswordForm({ setFormStep, setUserEmail }) {
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(ForgotPasswordSchema),
+        defaultValues: {
+            email: '',
+        }
     });
 
     const { mutate: forgotPassword, isLoading } = useForgotPassword();
@@ -56,7 +56,6 @@ function ForgotPasswordForm({ setFormStep, setUserEmail }) {
                         <Controller
                             name="email"
                             control={control}
-                            defaultValue=""
                             render={({ field }) => (
                                 <input
                                     {...field}

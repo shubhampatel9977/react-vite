@@ -5,20 +5,20 @@ import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthButton from "../../ui/buttons/AuthButton";
+import { SetPasswordSchema } from "../../validations/AuthSchema";
 import useSetNewPassword from "../../../hooks/auth/useSetNewPassword";
 
-// Define the validation schema with Yup
-const schema = yup.object().shape({
-    password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-    confirmPassword: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-});
 
 function SetPasswordForm({ userEmail }) {
 
     const navigate = useNavigate();
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(SetPasswordSchema),
+        defaultValues: {
+            password: '',
+            confirmPassword: '',
+        }
     });
 
     const { mutate: setNewPassword, isLoading } = useSetNewPassword();

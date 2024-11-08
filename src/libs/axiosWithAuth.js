@@ -19,7 +19,7 @@ axiosWithAuth.interceptors.response.use(
     if (error.response && error.response.status === 401 && error.config && !error.config.__isRetryRequest) {
       try {
         // Attempt to refresh the token
-        await axios.post("http://localhost:8080/api/auth/refreshToken", {}, { withCredentials: true });
+        await axios.post(`${bashPath}/auth/refreshToken`, {}, { withCredentials: true });
 
         // Mark request to prevent infinite retry loop
         error.config.__isRetryRequest = true;
