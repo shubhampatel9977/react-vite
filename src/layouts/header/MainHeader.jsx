@@ -21,15 +21,17 @@ function MainHeader() {
     };
 
     const logOutHandler = async () => {
+        dispatch(clearUserInfo());
+        navigate('/auth/login');
         try {
             await userLogOut({
                 onSuccess: (data) => {
-                    if (data?.success === true) {
-                        dispatch(clearUserInfo());
-                        navigate('/auth/login');
-                    } else {
-                        toast.error(data?.message);
-                    }
+                    // if (data?.success === true) {
+                    //     dispatch(clearUserInfo());
+                    //     navigate('/auth/login');
+                    // } else {
+                    //     toast.error(data?.message);
+                    // }
                 },
                 onError: (err) => {
                     toast.error(err?.message);

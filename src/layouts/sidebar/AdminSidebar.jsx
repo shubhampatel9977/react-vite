@@ -42,16 +42,17 @@ function AdminSidebar() {
     }
 
     function confirmSignOut() {
-
+        dispatch(clearUserInfo());
+        navigate("/auth/adminlogin");
         try {
             userLogOut({
                 onSuccess: (data) => {
-                    if (data?.success === true) {
-                        dispatch(clearUserInfo());
-                        navigate("/auth/adminlogin");
-                    } else {
-                        toast.error(data?.message);
-                    }
+                    // if (data?.success === true) {
+                    //     dispatch(clearUserInfo());
+                    //     navigate("/auth/adminlogin");
+                    // } else {
+                    //     toast.error(data?.message);
+                    // }
                 },
                 onError: (err) => {
                     toast.error(err?.message);
